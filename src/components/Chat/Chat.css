@@ -1,0 +1,62 @@
+/* src/components/ChatArea.css */
+.chat-area {
+    width: 1000px;
+    flex-grow: 1; /* Занимает оставшееся пространство */
+    display: flex;
+    flex-direction: column; /* Вертикальная ориентация */
+    
+}
+
+.chat-header {
+    padding: 10px;
+    background-color: #f0f0f0; /* Цвет фона для заголовка */
+    border-bottom: 1px solid #ccc; /* Нижняя граница для отделения заголовка от сообщений */
+}
+
+.chat-header h2 {
+    margin: 0; /* Убираем отступы у заголовка */
+}
+
+.messages {
+    flex-grow: 1; /* Занимает оставшееся пространство */
+    padding: 20px;
+    overflow-y: auto; /* Прокрутка по вертикали при переполнении */
+    display: flex; /* Используем flexbox для центрирования */
+    flex-direction: column; /* Вертикальная ориентация сообщений */
+    align-items: center; /* Центрируем сообщения по горизонтали */
+}
+
+.message {
+    margin-bottom: 10px; /* Отступы между сообщениями */
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 80%; /* Ограничиваем ширину сообщений */
+}
+
+/* Стили для сообщений собеседника (слева) */
+.message.left {
+    background-color: #e0f7fa; /* Цвет фона для сообщений собеседника */
+    align-self: flex-start; /* Выравнивание по левому краю */
+}
+
+/* Стили для ваших сообщений (справа) */
+.message.right {
+    background-color: #dbbbff; /* Цвет фона для ваших сообщений */
+    align-self: flex-end; /* Выравнивание по правому краю */
+}
+
+.input-area {
+    display: flex; /* Горизонтальное расположение элементов ввода и кнопки */
+    padding: 10px;
+    background-color: #fff; /* Цвет фона области ввода */
+}
+
+.input-area input {
+    flex-grow: 1; /* Поле ввода занимает доступное пространство */
+    padding: 15px; /* Увеличиваем внутренний отступ для большего размера поля ввода */
+    font-size: 16px; /* Увеличиваем размер шрифта для удобства ввода */
+}
+
+.input-area button {
+    margin-left: 10px; /* Отступ между полем ввода и кнопкой */
+}

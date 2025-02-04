@@ -1,0 +1,72 @@
+/* src/components/ChatScreen.css */
+.chat-screen {
+    display: flex;
+    height: 100vh; /* Занимает всю высоту окна */
+}
+
+.sidebar {
+    width: 250px; /* Ширина сайдбара */
+    background-color: #f0f0f0; /* Цвет фона сайдбара */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Тень для сайдбара */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 10px 0; /* Отступы между чатами */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.chat-area {
+    flex-grow: 1; /* Занимает оставшееся пространство */
+    display: flex;
+    flex-direction: column; /* Вертикальная ориентация */
+}
+
+.messages {
+    flex-grow: 1; /* Занимает оставшееся пространство */
+    padding: 20px;
+    overflow-y: auto; /* Прокрутка по вертикали при переполнении */
+}
+
+.message {
+    margin-bottom: 10px; /* Отступы между сообщениями */
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%; /* Ограничиваем ширину сообщения */
+}
+
+/* Стили для сообщений собеседника (слева) */
+.message.left {
+    background-color: #e0f7fa; /* Цвет фона для сообщений собеседника */
+    align-self: flex-start; /* Выравнивание по левому краю */
+}
+
+/* Стили для ваших сообщений (справа) */
+.message.right {
+    background-color: #ffe0b2; /* Цвет фона для ваших сообщений */
+    align-self: flex-end; /* Выравнивание по правому краю */
+}
+
+.input-area {
+    display: flex; /* Горизонтальное расположение элементов ввода и кнопки */
+    padding: 10px;
+    background-color: #fff; /* Цвет фона области ввода */
+}
+
+.input-area input {
+    flex-grow: 1; /* Поле ввода занимает доступное пространство */
+    padding: 10px;
+}
+
+.input-area button {
+    margin-left: 10px; /* Отступ между полем ввода и кнопкой */
+}

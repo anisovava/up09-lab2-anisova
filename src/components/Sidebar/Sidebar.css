@@ -1,0 +1,59 @@
+/* src/components/Sidebar.css */
+.sidebar {
+    width: 400px; /* Ширина сайдбара */
+    background-color: #f0f0f0; /* Цвет фона сайдбара */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Тень для сайдбара */
+}
+
+.tabs {
+    display: flex; /* Горизонтальное расположение вкладок */
+    margin-bottom: 10px; /* Отступ между вкладками и списком */
+}
+
+.tab {
+    flex-grow: 1; /* Вкладки занимают равное пространство */
+    padding: 10px;
+    border: none; /* Убираем стандартные стили кнопок */
+    background-color: transparent; /* Прозрачный фон */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s;
+}
+
+.tab:hover {
+    background-color: #e0e0e0; /* Цвет фона при наведении */
+}
+
+.tab.active {
+    font-weight: bold; /* Жирный шрифт для активной вкладки */
+    background-color: #d0d0d0; /* Цвет фона для активной вкладки */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.chat-list, .contact-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0;
+}
+
+.chat-item, .contact-item {
+    margin: 10px 0; /* Отступы между элементами списка */
+    cursor: pointer; /* Указатель при наведении */
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.chat-item:hover, .contact-item:hover {
+    background-color: #e0e0e0; /* Цвет фона при наведении */
+}
+
+.contact-name {
+    font-weight: bold; /* Жирный шрифт для имени контакта */
+}
+
+.last-message {
+    color: #888; /* Цвет для последнего сообщения */
+}
