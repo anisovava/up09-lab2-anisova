@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from './components/LoginScreen/Login';
-import MainScreen from './components/MainScreen/MainScreen';
+import { RouterProvider } from "react-router-dom";
 import router from './app/router/router';
 
 

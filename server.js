@@ -1,10 +1,10 @@
 const express = require('express');
-const http = require('http');
+const https = require('https');
 const socketIo = require('socket.io');
 const cors = require('cors');
 
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer(app);
 const io = socketIo(server, {
     cors: {
         origin: "*", // Allow requests from this origin
@@ -12,6 +12,9 @@ const io = socketIo(server, {
         credentials: true
     }
 });
+
+
+
 
 const users = {};
 const messages = []; // Store messages globally
@@ -90,4 +93,3 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
