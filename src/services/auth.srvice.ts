@@ -19,3 +19,12 @@ export const getMessages = async (id: string) => {
         throw error.response?.data?.message || error.message;
     }
 };
+
+export const getUsers = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/users`); // Предполагается наличие этого эндпоинта
+        return response.data;
+    } catch (error: any) {
+        throw error.response?.data?.message || error.message;
+    }
+};

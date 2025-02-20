@@ -1,40 +1,23 @@
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
 import useStore from '../store/Store';
-import {Message} from "../models/message.model";
+import { Message } from "../models/message.model";
 
 const API_BASE_URL = 'https://api.ktkv.dev';
 
 const useSocket = () => {
-    const { setOnlineUsers, setUserId, addMessage, userId } = useStore();
+    const { setOnlineUsers, addMessage, userId } = useStore();
 
     useEffect(() => {
         const socket: Socket = io(API_BASE_URL);
-
-       
-        const getAllUsers = () => {
-            const storedUsers = localStorage.getItem('allUsers');
-            return storedUsers ? JSON.parse(storedUsers) : [];
-        };
-
-        const setAllUsers = (users: string[]) => {
-            localStorage.setItem('allUsers', JSON.stringify(users));
-        };
 
         socket.on('connect', () => {
             console.log('Connected to WebSocket');
         });
 
         socket.on('users', (users) => {
+            console.log('Online users:', users);
             setOnlineUsers(users.map((user: any) => user.id));
-
-           
-            const onlineUserIds = users.map((user: any) => user.id);
-            const allUsers = getAllUsers();
-            const newUsers = onlineUserIds.filter(id => !allUsers.includes(id)); // Добавляем только новых
-            if (newUsers.length > 0) {
-                setAllUsers([...allUsers, ...newUsers]);
-            }
         });
 
         socket.on('private_message', (message: Message) => {
@@ -58,8 +41,7 @@ const useSocket = () => {
 
             socket.disconnect();
         };
-    }, [setOnlineUsers, setUserId, addMessage, userId]);
+    }, [setOnlineUsers, addMessage, userId]);
 };
-
 
 export default useSocket;

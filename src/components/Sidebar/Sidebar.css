@@ -57,3 +57,9 @@
 .last-message {
     color: #888; /* Цвет для последнего сообщения */
 }
+
+
+.scrollable-content{
+    overflow-y: auto;
+    max-height: 90vh;
+}

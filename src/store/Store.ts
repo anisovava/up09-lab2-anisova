@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import {Message} from "../models/message.model";
+import { create } from 'zustand';
+import { Message } from "../models/message.model";
 
 interface Chat {
     id: string;

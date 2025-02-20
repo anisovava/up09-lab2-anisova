@@ -567,3 +567,180 @@ Citations:
 
 ---
 Answer from Perplexity: https://www.perplexity.ai/search/dopishi-etot-kod-imia-eti-treb-j_Yk33WvRrixGsP.daAj.Q?utm_source=copy_output
+
+
+
+
+
+
+мое приложение ругается на id в этой строке:
+const newUsers = onlineUserIds.filter(id => !allUsers.includes(id)); // Добавляем только новых
+вот код:
+import { useEffect } from 'react';
+import { io, Socket } from 'socket.io-client';
+import useStore from '../store/Store';
+import { Message } from "../models/message.model";
+
+const API_BASE_URL = 'https://api.ktkv.dev';
+
+const useSocket = () => {
+const { setOnlineUsers, setUserId, addMessage, userId } = useStore();
+
+useEffect(() => {
+const socket: Socket = io(API_BASE_URL);
+
+const getAllUsers = () => {
+const storedUsers = localStorage.getItem('allUsers');
+return storedUsers ? JSON.parse(storedUsers) : [];
+};
+
+const setAllUsers = (users: string[]) => {
+localStorage.setItem('allUsers', JSON.stringify(users));
+};
+
+socket.on('connect', () => {
+console.log('Connected to WebSocket');
+});
+
+socket.on('users', (users) => {
+setOnlineUsers(users.map((user: any) => user.id));
+
+const onlineUserIds = users.map((user: any) => user.id);
+const allUsers = getAllUsers();
+const newUsers = onlineUserIds.filter(id => !allUsers.includes(id)); // Добавляем только новых
+if (newUsers.length > 0) {
+setAllUsers([...allUsers, ...newUsers]);
+}
+});
+
+socket.on('private_message', (message: Message) => {
+console.log('Private message received:', message);
+// Correctly add the message to the appropriate chat
+addMessage(message.from === userId ? message.to : message.from, message);
+});
+
+socket.on('disconnect', () => {
+console.log('Disconnected from WebSocket');
+});
+
+if (userId) {
+socket.emit('register', userId);
+}
+
+return () => {
+socket.off('connect');
+socket.off('users');
+socket.off('private_message');
+socket.off('disconnect');
+
+socket.disconnect();
+};
+}, [setOnlineUsers, setUserId, addMessage, userId]);
+};
+
+export default useSocket;
+вот если надо код useStore:
+import { create } from 'zustand';
+import { Message } from "../models/message.model";
+
+interface Chat {
+id: string;
+lastMessage: string;
+}
+
+interface UserState {
+userId: string | null;
+activeChat: string | null;
+chats: Chat[];
+messages: { [chatId: string]: Message[] };
+onlineUsers: string[];
+setUserId: (id: string) => void;
+setActiveChat: (chatId: string) => void;
+addChat: (chatId: string, lastMessage: string) => void;
+addMessage: (chatId: string, message: Message) => void;
+setOnlineUsers: (users: string[]) => void;
+}
+
+const useStore = create<UserState>((set, get) => ({
+userId: null,
+activeChat: null,
+chats: [],
+messages: {},
+onlineUsers: [],
+setUserId: (id: string) => set({ userId: id }),
+setActiveChat: (chatId: string) => set({ activeChat: chatId }),
+addChat: (chatId: string, lastMessage: string) => set(state => ({
+chats: [...state.chats, { id: chatId, lastMessage }]
+})),
+addMessage: (chatId: string, message: Message) => set(state => ({
+messages: {
+...state.messages,
+[chatId]: [...(state.messages[chatId] || []), message]
+}
+})),
+setOnlineUsers: (users: string[]) => set({ onlineUsers: users }),
+}));
+
+export default useStore;
+и код Chat:
+import React, { useState, useEffect, useRef } from 'react';
+import './Chat.css';
+import useStore from '../../store/Store';
+import { Message } from "../../models/message.model";
+import { nanoid } from 'nanoid';
+import { io, Socket } from 'socket.io-client';
+
+const API_BASE_URL = 'https://api.ktkv.dev';
+
+const Chat: React.FC = () => {
+const { activeChat, messages, userId, addMessage } = useStore();
+const [messageText, setMessageText] = useState('');
+const [socket, setSocket] = useState<undefined | Socket>(undefined);
+
+const sendMessage = () => {
+if (!activeChat || !messageText || !userId) return;
+
+const messageData: Message = {
+from: userId,
+to: activeChat,
+message: messageText,
+};
+
+socket && socket.emit('private_message', messageData);
+addMessage(activeChat, messageData);
+setMessageText('');
+};
+
+useEffect(() => {
+setSocket(io(API_BASE_URL))
+return () => {
+socket && socket.disconnect();
+};
+}, []);
+
+return (
+<div className="chat-area">
+<div className="chat-header">
+<h2>{activeChat || 'Выберите чат'}</h2>
+</div>
+<div className="messages">
+{messages[activeChat!]?.map((msg: Message) => (
+<div key={nanoid()} className={`message ${msg.from === userId ? 'right' : 'left'}`}>
+{msg.message}
+</div>
+))}
+</div>
+<div className="input-area">
+<input
+type="text"
+placeholder="Введите сообщение..."
+value={messageText}
+onChange={(e) => setMessageText(e.target.value)}
+/>
+<button onClick={sendMessage}>Отправить</button>
+</div>
+</div>
+);
+};
+
+export default Chat;

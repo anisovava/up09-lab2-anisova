@@ -20,7 +20,7 @@ const users = {};
 const messages = []; // Store messages globally
 
 app.use(cors({
-    origin: "*", // Allow requests from this origin
+    origin: "*", 
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -73,6 +73,12 @@ io.on('connection', (socket) => {
             console.log(`Message from ${socket.userId} to ${recipient.id}: ${message}`);
             // Store message in history
             messages.push({ from: socket.userId, to, message, timestamp });
+    
+            // Отправка подтверждения отправителю
+            socket.emit('message_sent', { id: data.id, status: 'sent' });
+        } else {
+            // Если получатель не в сети, уведомить отправителя
+            socket.emit('message_failed', { id: data.id, error: 'Recipient not online' });
         }
     });
 
